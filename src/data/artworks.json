@@ -2,7 +2,7 @@
     {
         "id": "monica-geller",
         "title": "Drawing Monica Geller",
-        "image": "./public/MonicaGeller.jpeg",
+        "image": "/MonicaGeller.jpeg",
         "type": "original",
         "status": "disponible",
         "price": null,
@@ -15,7 +15,7 @@
     {
         "id": "angel-bebe-tomi",
         "title": "Tomi",
-        "image": "./public/angel-bebe.jpeg",
+        "image": "/angel-bebe.jpeg",
         "type": "encargo",
         "status": "vendida",
         "price": null,
@@ -28,7 +28,7 @@
     {
         "id": "arcangel-miguel",
         "title": "Arcángel armado",
-        "image": "./public/arcangel.jpeg",
+        "image": "/arcangel.jpeg",
         "type": "original",
         "status": "disponible",
         "price": null,
@@ -41,7 +41,7 @@
     {
         "id": "flor-loto",
         "title": "Flor de loto",
-        "image": "./public/flor-loto.jpeg",
+        "image": "/flor-loto.jpeg",
         "type": "impresion",
         "status": "vendida",
         "price": null,
@@ -54,7 +54,7 @@
     {
         "id": "camioneta",
         "title": "Camioneta clásica",
-        "image": "./public/camioneta.jpeg",
+        "image": "/camioneta.jpeg",
         "type": "original",
         "status": "vendida",
         "price": null,
