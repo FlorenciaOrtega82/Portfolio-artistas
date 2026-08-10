@@ -1,0 +1,156 @@
+---
+import artworks from '../data/artworks.json';
+
+const statusConfig: Record<string, { label: string; classes: string }> = {
+  disponible: {
+    label: 'Disponible',
+    classes: 'bg-[var(--color-moss-bg)] text-[var(--color-moss)]',
+  },
+  vendida: {
+    label: 'Vendida',
+    classes: 'bg-[var(--color-ink-bg)] text-[var(--color-ink-soft)]',
+  },
+  'a-pedido': {
+    label: 'A pedido',
+    classes: 'bg-[var(--color-ochre-bg)] text-[var(--color-ochre)]',
+  },
+};
+const typeLabels: Record<string, string> = {
+  original: 'Obra original',
+  impresion: 'Impresión',
+  encargo: 'Encargo',
+};
+---
+
+<section id="obra" class="px-6 py-16 max-w-6xl mx-auto">
+  <h2 class="text-xl md:text-2xl font-serif text-neutral-900 mb-8 text-center">
+    Obra
+  </h2>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+    {artworks.map((art) => (
+      
+      <button type="button" class="group relative text-left cursor-pointer" data-artwork-id={art.id}>
+        <div class="relative overflow-hidden rounded-xl bg-neutral-100 aspect-square">
+          <img
+            src={art.image}
+            alt={art.title}
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          <span
+            class={`absolute bottom-2 left-2 text-xs font-medium px-2 py-1 rounded-full ${statusConfig[art.status].classes}`}
+          >
+            {statusConfig[art.status].label}
+          </span>
+        </div>
+
+        <div class="mt-2 px-1">
+          <p class="text-sm font-medium text-neutral-900 truncate">
+            {art.title}
+          </p>
+          <div class="flex items-center justify-between mt-1">
+            <span class="text-xs text-neutral-400">
+              {typeLabels[art.type]}
+            </span>
+            {art.priceVisible && art.price && (
+              <span class="text-xs font-medium text-neutral-700">
+                ${art.price.toLocaleString('es-AR')}
+              </span>
+            )}
+          </div>
+        </div>
+      </button>
+    ))}
+  </div>
+
+  <!-- Modal: uno solo, reutilizado para la obra que se clickee -->
+  <dialog
+    id="artwork-modal"
+    class="backdrop:bg-black/70 rounded-xl p-0 max-w-2xl w-[90vw] m-auto"
+  >
+    <div class="relative">
+      <button
+        id="modal-close"
+        type="button"
+        aria-label="Cerrar"
+        class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M18 6 6 18" /><path d="M6 6l12 12" />
+        </svg>
+      </button>
+
+      <img id="modal-main-image" src="" alt="" class="w-full max-h-[60vh] object-contain bg-neutral-100" />
+
+      <div class="p-5">
+        <h3 id="modal-title" class="font-serif text-lg text-neutral-900"></h3>
+        <p id="modal-description" class="text-sm text-neutral-500 mt-1"></p>
+
+        <!-- Contador de fotos: "2 de 4" -->
+        <p id="modal-counter" class="text-xs text-neutral-400 mt-3 mb-1"></p>
+
+        <div id="modal-thumbnails" class="flex gap-2 overflow-x-auto"></div>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<script type="application/json" id="artworks-data" set:html={JSON.stringify(artworks)} />
+
+<script>
+  const dataEl = document.getElementById('artworks-data');
+  const artworksData = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+
+  const modal = document.getElementById('artwork-modal') as HTMLDialogElement | null;
+  const modalImage = document.getElementById('modal-main-image') as HTMLImageElement | null;
+  const modalTitle = document.getElementById('modal-title');
+  const modalDescription = document.getElementById('modal-description');
+  const modalCounter = document.getElementById('modal-counter');
+  const modalThumbnails = document.getElementById('modal-thumbnails');
+  const closeButton = document.getElementById('modal-close');
+
+  function openModal(artworkId: string) {
+    const art = artworksData.find((a: any) => a.id === artworkId);
+    if (!art || !modal || !modalImage || !modalTitle || !modalDescription || !modalThumbnails || !modalCounter) return;
+
+    const allImages = [art.image, ...(art.gallery || [])];
+    let currentIndex = 0;
+
+    // Función interna para actualizar la imagen principal + el contador,
+    // reutilizada tanto al abrir el modal como al clickear una miniatura.
+    const showImage = (index: number) => {
+      currentIndex = index;
+      modalImage.src = allImages[index];
+      modalCounter.textContent = allImages.length > 1 ? `${index + 1} de ${allImages.length}` : '';
+    };
+
+    modalTitle.textContent = art.title;
+    modalDescription.textContent = art.description || '';
+    modalThumbnails.innerHTML = '';
+
+    allImages.forEach((src: string, i: number) => {
+      const thumb = document.createElement('button');
+      thumb.type = 'button';
+      thumb.className = 'flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border border-neutral-200';
+      thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover" alt="" />`;
+      thumb.addEventListener('click', () => showImage(i));
+      modalThumbnails.appendChild(thumb);
+    });
+
+    showImage(0);
+    modal.showModal();
+  }
+
+  document.querySelectorAll('[data-artwork-id]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-artwork-id');
+      if (id) openModal(id);
+    });
+  });
+
+  closeButton?.addEventListener('click', () => modal?.close());
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) modal.close();
+  });
+</script>

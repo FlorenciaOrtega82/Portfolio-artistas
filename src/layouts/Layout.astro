@@ -1,0 +1,36 @@
+---
+// src/layouts/Layout.astro
+// Este es el "molde" que envuelve toda la página: el <html>, <head>, y estilos base.
+// Todo lo que pongas dentro de <Layout>...</Layout> en otras páginas
+// se inserta automáticamente donde dice <slot />.
+import BackToTop from "../components/BackToTop.astro";
+import Navbar from "../components/Navbar.astro";
+import "../styles/global.css";
+interface Props {
+    title?: string;
+}
+
+const { title = "Flor Ortega | Artista y dibujante" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body class="bg-[var(--color-paper)] text-[var(--color-ink)]">
+        <Navbar />
+        <!-- slot es donde Astro inyecta el contenido que pusiste entre las etiquetas <Layout> -->
+        <slot />
+        <BackToTop />
+    </body>
+</html>

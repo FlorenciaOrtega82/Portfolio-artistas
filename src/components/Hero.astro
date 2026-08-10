@@ -1,0 +1,113 @@
+---
+// src/components/Hero.astro
+interface Props {
+  name?: string;
+  tagline?: string;
+  images?: string[];
+  focalPoints?: string[]; // opcional: qué parte de cada imagen priorizar al recortar
+  location?: string;
+}
+
+const {
+  name = 'Flor Ortega',
+  tagline = 'Realismo en grafito y carboncillo',
+  images = [
+    '/images/camioneta-draw.jpeg',
+    '/images/sketchbook-draw.jpg',
+    '/images/angel-eyes-draw.jpeg',
+  ],
+  // 'center' por defecto para cada imagen. Si alguna se recorta mal
+  // (por ejemplo tapa justo la parte más importante del dibujo), podés
+  // pasar algo como ['center', 'top', 'center'] para esa imagen puntual.
+  focalPoints = [],
+  location = 'San Rafael, Mendoza',
+} = Astro.props;
+---
+
+<section
+  id="inicio"
+  class="relative h-[60vh] min-h-[400px] md:h-[85vh] md:min-h-[520px] overflow-hidden flex items-center justify-center text-center px-6"
+>
+  <div class="absolute inset-0">
+    {images.map((src, i) => (
+      <img
+        src={src}
+        alt=""
+        class="hero-slide absolute inset-0 w-full h-full object-cover"
+        style={`animation-delay: ${i * 6}s; object-position: ${focalPoints[i] || 'center'};`}
+      />
+    ))}
+    <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/85 via-[var(--color-ink)]/25 to-[var(--color-ink)]/35"></div>
+  </div>
+
+  <div class="relative z-10">
+    <h1 class="hero-line font-[family-name:var(--font-display)] text-3xl md:text-6xl font-semibold tracking-tight text-[var(--color-paper)]">
+      {name}
+    </h1>
+
+    <svg width="90" height="12" viewBox="0 0 72 10" class="hero-line mx-auto mt-4 mb-5" style="animation-delay:0.15s" aria-hidden="true">
+      <path d="M2 6 C 18 2, 30 8, 45 4 S 65 2, 70 5" stroke="var(--color-paper)" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    </svg>
+
+    <p class="hero-line text-sm md:text-xl text-[var(--color-paper)]/90 max-w-xs md:max-w-md mx-auto" style="animation-delay:0.3s">
+      {tagline}
+    </p>
+
+    {location && (
+      <p class="hero-line mt-3 text-xs text-[var(--color-paper)]/70 uppercase tracking-[0.15em]" style="animation-delay:0.45s">
+        {location}
+      </p>
+    )}
+
+    <a
+      href="#obra"
+      class="hero-line inline-block mt-8 bg-[var(--color-paper)] text-[var(--color-ink)] text-sm font-medium px-6 py-3 rounded-full hover:bg-[var(--color-accent)] hover:text-[var(--color-paper)] transition-colors"
+      style="animation-delay:0.6s"
+    >
+      Ver la obra
+    </a>
+  </div>
+</section>
+
+<style>
+  .hero-line {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: hero-rise 0.7s ease-out forwards;
+  }
+
+  @keyframes hero-rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-slide {
+    opacity: 0;
+    animation: hero-fade 18s ease-in-out infinite;
+  }
+
+  @keyframes hero-fade {
+    0%   { opacity: 0; }
+    4%   { opacity: 1; }
+    30%  { opacity: 1; }
+    36%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-line {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+    .hero-slide {
+      animation: none;
+      opacity: 1;
+    }
+    .hero-slide:not(:first-child) {
+      display: none;
+    }
+  }
+</style>

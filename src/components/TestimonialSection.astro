@@ -1,0 +1,54 @@
+---
+// src/components/TestimonialsSection.astro
+// Sección de reseñas de clientes. Usa el mismo patrón que ya conocés:
+// datos en JSON, componente que los recorre y arma las tarjetas.
+import testimonials from '../data/testimonials.json';
+---
+
+<section id="reseñas" class="px-6 py-20 bg-[var(--color-paper)]">
+  <div class="max-w-5xl mx-auto">
+
+    <h2 class="font-[family-name:var(--font-display)] text-2xl text-[var(--color-ink)] mb-2 text-center">
+      Lo que dicen mis clientes
+    </h2>
+    <p class="text-sm text-[var(--color-ink-soft)] text-center mb-12 max-w-md mx-auto">
+      Palabras de quienes encargaron una pieza
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      {testimonials.map((t) => (
+        <div class="bg-[var(--color-ink-bg)] rounded-xl p-6 flex flex-col">
+          <!-- Ícono de comilla, dibujado en SVG simple -->
+          <svg width="28" height="22" viewBox="0 0 28 22" class="mb-4 text-[var(--color-accent)]" fill="currentColor">
+            <path d="M0 22V13.6C0 9 1.2 5.6 3.6 3.4 6 1.2 8.9 0 12.4 0v4.2c-2 .3-3.6 1-4.6 2.2-1 1.1-1.6 2.6-1.6 4.4h4.6V22H0zM15.6 22V13.6c0-4.6 1.2-8 3.6-10.2C21.6 1.2 24.5 0 28 0v4.2c-2 .3-3.6 1-4.6 2.2-1 1.1-1.6 2.6-1.6 4.4h4.6V22H15.6z"/>
+          </svg>
+
+          <p class="text-sm text-[var(--color-ink)] leading-relaxed flex-1">
+            {t.quote}
+          </p>
+
+          <div class="flex items-center gap-3 mt-5">
+            {t.photo && (
+              <img
+                src={t.photo}
+                alt={t.name}
+                class="w-9 h-9 rounded-full object-cover grayscale"
+              />
+            )}
+            <div>
+              <p class="text-sm font-medium text-[var(--color-ink)]">
+                {t.name}
+              </p>
+              {t.piece && (
+                <p class="text-xs text-[var(--color-ink-soft)]">
+                  {t.piece}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

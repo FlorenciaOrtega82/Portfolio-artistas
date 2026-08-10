@@ -1,0 +1,16 @@
+[
+  {
+    "id": "t-01",
+    "name": "Nombre del cliente",
+    "quote": "Acá va la reseña real que te haya escrito el cliente, tal como te la mandó.",
+    "piece": "Encargo: retrato",
+    "photo": ""
+  },
+  {
+    "id": "t-02",
+    "name": "Nombre del cliente",
+    "quote": "Otra reseña real acá.",
+    "piece": "Pieza memorial",
+    "photo": ""
+  }
+]

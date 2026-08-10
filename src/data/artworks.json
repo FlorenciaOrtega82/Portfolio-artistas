@@ -1,0 +1,67 @@
+[
+    {
+        "id": "monica-geller",
+        "title": "Drawing Monica Geller",
+        "image": "./public/MonicaGeller.jpeg",
+        "type": "original",
+        "status": "disponible",
+        "price": null,
+        "priceVisible": false,
+        "description": "Retrato en grafito, estudio de luz y textura de cabello.",
+        "technique": "Grafito sobre papel",
+        "size": "30x40cm",
+        "featured": true
+    },
+    {
+        "id": "angel-bebe-tomi",
+        "title": "Tomi",
+        "image": "./public/angel-bebe.jpeg",
+        "type": "encargo",
+        "status": "vendida",
+        "price": null,
+        "priceVisible": false,
+        "description": "Pieza memorial personalizada, encargo a medida.",
+        "technique": "Grafito sobre papel",
+        "size": "21x30cm",
+        "featured": true
+    },
+    {
+        "id": "arcangel-miguel",
+        "title": "Arcángel armado",
+        "image": "./public/arcangel.jpeg",
+        "type": "original",
+        "status": "disponible",
+        "price": 60000,
+        "priceVisible": true,
+        "description": "Composición dinámica inspirada en el arte clásico religioso.",
+        "technique": "Grafito sobre papel",
+        "size": "40x50cm",
+        "featured": true
+    },
+    {
+        "id": "flor-loto",
+        "title": "Flor de loto",
+        "image": "./public/flor-loto.jpeg",
+        "type": "impresion",
+        "status": "vendida",
+        "price": 8000,
+        "priceVisible": true,
+        "description": "Estudio botánico en grafito, disponible como impresión numerada.",
+        "technique": "Grafito sobre papel",
+        "size": "A4",
+        "featured": false
+    },
+    {
+        "id": "camioneta",
+        "title": "Camioneta clásica",
+        "image": "./public/camioneta.jpeg",
+        "type": "original",
+        "status": "vendida",
+        "price": null,
+        "priceVisible": false,
+        "description": "Realismo automotriz, técnica adaptable a otros vehículos por encargo.",
+        "technique": "Grafito sobre papel",
+        "size": "30x40cm",
+        "featured": false
+    }
+]

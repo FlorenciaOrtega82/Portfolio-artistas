@@ -1,0 +1,47 @@
+---
+interface Props {
+  paragraphs?: string[];
+  photo?: string;
+}
+
+const {
+  paragraphs = [
+    'Cuando dibujo, el tiempo deja de importar. Puedo pasar horas frente a una hoja sin aburrirme, completamente concentrada en un detalle de luz, una textura o simplemente en intentar que algo se vea como lo imagino.',
+    'Soy autodidacta. Nunca estudié arte formalmente; aprendí mirando, probando, equivocándome y analizando. Muchas veces, un dibujo nace de la curiosidad: quiero entender cómo funciona algo, o ponerme un desafío que todavía no sé si voy a poder resolver. Y cuando algo no sale como esperaba, lo tomo como parte del proceso. Lo anoto, sigo adelante y vuelvo a intentarlo. Con el tiempo, casi siempre sale un poco mejor.',
+    'Dibujo desde siempre, aunque hubo años en los que lo dejé de lado. Durante mucho tiempo tampoco imaginé el arte como una forma de vida. Crecí escuchando que "no se puede vivir del arte", y durante un tiempo llegué a creerlo. Hoy pienso diferente. El arte siempre estuvo ahí, incluso cuando yo me alejé de él, y ahora quiero darle el lugar que realmente tiene en mi vida.',
+    'También hay obras que nacen de algo más personal: alguien que quiere conservar un momento, una persona o incluso una ausencia. Son esos trabajos los que más me marcan, porque en esos casos el dibujo deja de ser solamente una obra. Se convierte en un recuerdo, en una forma de guardar a alguien y, de alguna manera, en un lugar al que esa persona puede volver cada vez que quiera mirar a quien quiere.',
+  ],
+  photo = '/public/foto-perfil.jpeg',
+} = Astro.props;
+---
+
+<section id="la-artista" class="px-6 py-24 md:py-28">
+  <div class="max-w-xl mx-auto">
+
+    {photo && (
+      <img
+        src={photo}
+        alt="Flor Ortega en su espacio de trabajo"
+        class="w-40 h-40 rounded-full object-cover grayscale mx-auto mb-10"
+      />
+    )}
+
+    <h2 class="font-[family-name:var(--font-display)] text-2xl text-[var(--color-ink)] mb-8 text-center">
+      La artista
+    </h2>
+
+    <!--
+      leading-loose = interlineado más generoso que el default.
+      max-w-xl en el contenedor padre ya limita el ancho de línea a algo cómodo de leer.
+      first:text-lg = el primer párrafo un poco más grande, como "entrada" a la historia.
+    -->
+    <div class="space-y-6">
+      {paragraphs.map((text, i) => (
+        <p class={`text-[var(--color-ink-soft)] leading-loose ${i === 0 ? 'text-lg' : 'text-base'}`}>
+          {text}
+        </p>
+      ))}
+    </div>
+
+  </div>
+</section>

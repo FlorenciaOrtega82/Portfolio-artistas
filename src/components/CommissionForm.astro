@@ -1,0 +1,112 @@
+
+---
+// src/components/CommissionForm.astro
+// Formulario de encargo: reemplaza el "escribime por DM" por algo más directo,
+// que ya filtra la información básica antes de que el cliente te escriba.
+
+// Por ahora usamos Formspree (formspree.io) como backend del formulario, porque
+// es gratis para empezar y no requiere que armes un servidor propio.
+// Vas a necesitar crear una cuenta ahí y reemplazar la URL de abajo por la tuya.
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/TU-ID-DE-FORMULARIO';
+---
+
+<section class="px-6 py-16 max-w-2xl mx-auto" id="encargo">
+
+  <h2 class="text-xl md:text-2xl font-serif text-neutral-900 mb-2 text-center">
+    Encargá una pieza
+  </h2>
+  <p class="text-sm text-neutral-500 text-center mb-10">
+    Contame qué tenés en mente y te respondo con precio y tiempos estimados.
+  </p>
+
+  <!--
+    method="POST" y action apuntando a Formspree: cuando el usuario envía el
+    formulario, el navegador manda los datos directo a ese servicio, que a su vez
+    te reenvía un mail con la info. No necesitás backend propio para esto.
+  -->
+  <form
+    method="POST"
+    action={FORMSPREE_ENDPOINT}
+    class="flex flex-col gap-5"
+  >
+
+    <div class="flex flex-col gap-1">
+      <label for="nombre" class="text-sm font-medium text-neutral-700">
+        Nombre
+      </label>
+      <input
+        type="text"
+        id="nombre"
+        name="nombre"
+        required
+        class="border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400"
+      />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="email" class="text-sm font-medium text-neutral-700">
+        Email
+      </label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        class="border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400"
+      />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="tipo" class="text-sm font-medium text-neutral-700">
+        Tipo de pieza
+      </label>
+      <!-- select = menú desplegable. Cada "option" es una opción del menú. -->
+      <select
+        id="tipo"
+        name="tipo"
+        required
+        class="border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400"
+      >
+        <option value="">Elegí una opción</option>
+        <option value="retrato">Retrato</option>
+        <option value="memorial">Pieza memorial</option>
+        <option value="otro">Otro</option>
+      </select>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="referencia" class="text-sm font-medium text-neutral-700">
+        Referencia (foto, descripción, tamaño deseado)
+      </label>
+      <!-- textarea = campo de texto de varias líneas, para descripciones largas -->
+      <textarea
+        id="referencia"
+        name="referencia"
+        rows="4"
+        required
+        class="border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400"
+      ></textarea>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="presupuesto" class="text-sm font-medium text-neutral-700">
+        Presupuesto aproximado (opcional)
+      </label>
+      <input
+        type="text"
+        id="presupuesto"
+        name="presupuesto"
+        placeholder="Ej: $30.000 - $50.000"
+        class="border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400"
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="mt-2 bg-neutral-900 text-white text-sm font-medium rounded-md px-6 py-3 hover:bg-neutral-700 transition-colors"
+    >
+      Enviar consulta
+    </button>
+
+  </form>
+</section>

@@ -1,0 +1,131 @@
+---
+// src/components/Navbar.astro
+const links = [
+  { href: '#inicio', label: 'Inicio' },
+  { href: '#la-artista', label: 'La artista' },
+  { href: '#obra', label: 'Obra' },
+  { href: '#sketchbook', label: 'Cuaderno' },
+  { href: '#encargo', label: 'Encargar' },
+  { href: '#reseñas', label: 'Reseñas' },
+];
+---
+
+<nav class="sticky top-0 z-40 backdrop-blur-sm bg-[var(--color-paper)]/85 border-b border-[var(--color-line)]">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+
+    <a href="#inicio" class="flex items-center">
+      <img src="/images/logo.svg" alt="Flor Ortega" class="h-9 w-auto object-contain" />
+    </a>
+
+    <!-- Links normales, visibles solo en pantallas medianas o más grandes -->
+    <div class="hidden md:flex items-center gap-7">
+      {links.slice(1).map((link) => (
+        <a
+          href={link.href}
+          class="text-sm text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+
+    <!--
+      Botón hamburguesa: solo visible en mobile (md:hidden es lo opuesto de "hidden md:flex" de arriba).
+      aria-expanded y aria-controls son para accesibilidad: le dicen a un lector de pantalla
+      si el menú está abierto o cerrado, y a qué elemento controla este botón.
+    -->
+    <button
+      id="menu-toggle"
+      type="button"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      class="md:hidden relative w-9 h-9 flex items-center justify-center"
+    >
+      <!--
+        Las dos líneas del ícono. Cada una es un <span>, y las animamos con CSS
+        para que se transformen en una "X" cuando el menú está abierto, en vez
+        de simplemente cambiar de ícono de golpe.
+      -->
+      <span class="hamburger-line hamburger-line-top absolute w-5 h-[1.5px] bg-[var(--color-ink)] transition-all duration-300"></span>
+      <span class="hamburger-line hamburger-line-bottom absolute w-5 h-[1.5px] bg-[var(--color-ink)] transition-all duration-300"></span>
+    </button>
+  </div>
+
+  <!--
+    Panel del menú mobile. Arranca oculto (max-h-0 + overflow-hidden) y al abrirse
+    se expande con una transición suave de altura, en vez de aparecer de golpe.
+  -->
+  <div
+    id="mobile-menu"
+    class="md:hidden max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out border-t border-transparent"
+  >
+    <div class="flex flex-col px-6 py-4 gap-4">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class="mobile-menu-link text-sm text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<style>
+  /* Posición base de las dos líneas: una arriba, una abajo del centro */
+  .hamburger-line-top {
+    transform: translateY(-4px);
+  }
+  .hamburger-line-bottom {
+    transform: translateY(4px);
+  }
+
+  /*
+    Cuando el botón tiene la clase "is-open" (se la agregamos con JS al hacer click),
+    la línea de arriba rota 45° y la de abajo -45°, formando una X.
+    translateY(0) las lleva al centro antes de rotar, para que el cruce quede prolijo.
+  */
+  #menu-toggle.is-open .hamburger-line-top {
+    transform: translateY(0) rotate(45deg);
+  }
+  #menu-toggle.is-open .hamburger-line-bottom {
+    transform: translateY(0) rotate(-45deg);
+  }
+</style>
+
+<script>
+  const toggleBtn = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  if (toggleBtn && mobileMenu) {
+    const closeMenu = () => {
+      toggleBtn.classList.remove('is-open');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.setAttribute('aria-label', 'Abrir menú');
+      mobileMenu.style.maxHeight = '0px';
+    };
+
+    const openMenu = () => {
+      toggleBtn.classList.add('is-open');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      toggleBtn.setAttribute('aria-label', 'Cerrar menú');
+      // scrollHeight = la altura real que ocupa el contenido del menú.
+      // La usamos como destino de la transición en vez de un número fijo,
+      // porque si sumás o sacás links después, esto se sigue ajustando solo.
+      mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+    };
+
+    toggleBtn.addEventListener('click', () => {
+      const isOpen = toggleBtn.classList.contains('is-open');
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    // Al clickear cualquier link del menú, lo cerramos automáticamente
+    // (sino el usuario navega a la sección pero el menú se queda abierto tapando contenido).
+    document.querySelectorAll('.mobile-menu-link').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+  }
+</script>

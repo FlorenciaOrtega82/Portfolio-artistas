@@ -1,0 +1,85 @@
+---
+interface ProcessItem {
+    id: string;
+    title: string;
+    media: string;
+    isVideo?: boolean;
+    description?: string;
+}
+
+const processItems: ProcessItem[] = [
+    {
+        id: "boceto-arcangel",
+        title: "Boceto inicial del arcángel",
+        media: "/images/proceso-arcangel-boceto.jpg",
+        description:
+            "Primeras líneas antes de entrar en detalle de luces y sombras.",
+    },
+    {
+        id: "alas-detalle",
+        title: "Detalle de plumas",
+        media: "/images/proceso-alas.jpg",
+        description:
+            "Trabajo capa por capa para lograr textura realista en las alas.",
+    },
+    {
+        id: "como-dibujar-angel",
+        title: "Cómo dibujar un ángel",
+        media: "/videos/como-dibujar-angel.mp4",
+        isVideo: true,
+        description: "Proceso completo, de boceto a pieza terminada.",
+    },
+];
+---
+
+<section id="proceso" class="px-6 py-16 bg-neutral-50">
+    <div class="max-w-6xl mx-auto">
+        <h2
+            class="text-xl md:text-2xl font-serif text-neutral-900 mb-2 text-center"
+        >
+            Proceso
+        </h2>
+        <p class="text-sm text-neutral-500 text-center mb-10 max-w-md mx-auto">
+            Del boceto a la obra terminada
+        </p>
+
+        <div
+            class="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-3 md:overflow-visible"
+        >
+            {
+                processItems.map((item) => (
+                    <div class="shrink-0 w-64 md:w-auto snap-start rounded-lg overflow-hidden bg-white shadow-sm">
+                        <div class="aspect-video bg-neutral-200">
+                            {item.isVideo ? (
+                                <video
+                                    src={item.media}
+                                    class="w-full h-full object-cover"
+                                    controls
+                                    muted
+                                    loop
+                                />
+                            ) : (
+                                <img
+                                    src={item.media}
+                                    alt={item.title}
+                                    class="w-full h-full object-cover"
+                                />
+                            )}
+                        </div>
+
+                        <div class="p-4">
+                            <p class="text-sm font-medium text-neutral-900">
+                                {item.title}
+                            </p>
+                            {item.description && (
+                                <p class="text-xs text-neutral-500 mt-1">
+                                    {item.description}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

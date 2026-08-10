@@ -1,0 +1,78 @@
+---
+import sketches from '../data/sketchbook.json';
+---
+
+<section id="sketchbook" class="py-20 bg-[var(--color-ink-bg)]">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <h2 class="font-[family-name:var(--font-display)] text-2xl text-[var(--color-ink)] mb-2 text-center">
+      Cuaderno de bocetos
+    </h2>
+    <p class="text-sm text-[var(--color-ink-soft)] text-center mb-10 max-w-md mx-auto">
+      Ideas rápidas, práctica diaria, y de vez en cuando algo que se convierte en obra terminada.
+    </p>
+
+    <div class="hidden md:flex justify-end gap-2 mb-4 max-w-6xl mx-auto">
+      <button id="sketch-prev" aria-label="Anterior" class="w-9 h-9 rounded-full border border-[var(--color-line)] flex items-center justify-center hover:bg-[var(--color-paper)] transition-colors">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button id="sketch-next" aria-label="Siguiente" class="w-9 h-9 rounded-full border border-[var(--color-line)] flex items-center justify-center hover:bg-[var(--color-paper)] transition-colors">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <div
+      id="sketch-track"
+      class="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth [scrollbar-width:none]"
+    >
+      <!--
+        El truco de la inclinación: alternamos una leve rotación según si el índice
+        es par o impar (con un poco de variación extra cada 3), en vez de usar la
+        misma clase para todas. Da sensación de "tiradas sobre la mesa" sin que se
+        vea repetitivo ni caótico. Este comentario va ACÁ, antes del map, y no
+        adentro del paréntesis del .map() — ese fue el error del compilador.
+      -->
+      {sketches.map((sketch, i) => (
+        <div
+          class:list={[
+            'flex-shrink-0 w-52 md:w-60 snap-start bg-[var(--color-paper)] p-2 pb-4 shadow-sm rounded-sm',
+            i % 3 === 0 && 'rotate-[-1.5deg]',
+            i % 3 === 1 && 'rotate-[1deg]',
+            i % 3 === 2 && 'rotate-[-0.5deg]',
+          ]}
+        >
+          <img
+            src={sketch.image}
+            alt={`Página de cuaderno ${sketch.date ? `del ${sketch.date}` : ''}`}
+            class="w-full aspect-[3/4] object-cover"
+          />
+          {sketch.date && (
+            <p class="text-[10px] text-[var(--color-ink-soft)] mt-2 text-center tracking-wide">
+              {sketch.date}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  #sketch-track::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  const track = document.getElementById('sketch-track');
+  const prevBtn = document.getElementById('sketch-prev');
+  const nextBtn = document.getElementById('sketch-next');
+
+  prevBtn?.addEventListener('click', () => {
+    track?.scrollBy({ left: -300, behavior: 'smooth' });
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    track?.scrollBy({ left: 300, behavior: 'smooth' });
+  });
+</script>
