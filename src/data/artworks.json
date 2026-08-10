@@ -7,7 +7,7 @@
         "status": "disponible",
         "price": null,
         "priceVisible": false,
-        "description": "Retrato en grafito, estudio de luz y textura de cabello.",
+        "description": "No conozco Friends, pero el personaje me pareció una referencia hermosa para lo que quería probar: una hoja de un gramaje que nunca había usado, carbonilla y grafito juntos. A veces un dibujo nace así, de las ganas de experimentar con los materiales más que de una idea fija, y este fue de esos.",
         "technique": "Grafito sobre papel",
         "size": "30x40cm",
         "featured": true
@@ -20,7 +20,7 @@
         "status": "vendida",
         "price": null,
         "priceVisible": false,
-        "description": "Pieza memorial personalizada, encargo a medida.",
+        "description": "Esta pieza nació de un pedido muy personal: alguien que quería tener cerca, en un dibujo, a un hijo que perdió hace años. Me envió una imagen que guardaba en su memoria, y a partir de ahí armé el retrato. Fue un desafío técnico distinto a los demás; no se trataba solo de precisión, sino de encontrar la suavidad justa en cada trazo, esa delicadeza que hiciera que la pieza se sintiera tierna y no fría. Mi intención fue que, al mirarla, pudiera sentir a su hijo cerca otra vez.",
         "technique": "Grafito sobre papel",
         "size": "21x30cm",
         "featured": true
@@ -31,9 +31,9 @@
         "image": "./public/arcangel.jpeg",
         "type": "original",
         "status": "disponible",
-        "price": 60000,
+        "price": null,
         "priceVisible": true,
-        "description": "Composición dinámica inspirada en el arte clásico religioso.",
+        "description": "Elegí a Gabriel por lo que representa: protección. Quería un desafío grande, literal, en una hoja A3, que me obligara a meterme de lleno en anatomía y en aprender a sombrear con suavidad. Le dediqué 20 horas que disfruté una por una, y de esta pieza me llevo mucho más que el dibujo terminado: aprendí a usar mejor mis materiales y a entender el cuerpo de otra forma.",
         "technique": "Grafito sobre papel",
         "size": "40x50cm",
         "featured": true
@@ -44,9 +44,9 @@
         "image": "./public/flor-loto.jpeg",
         "type": "impresion",
         "status": "vendida",
-        "price": 8000,
+        "price": null,
         "priceVisible": true,
-        "description": "Estudio botánico en grafito, disponible como impresión numerada.",
+        "description": "Fue un regalo para mi mamá. Tenía ganas de dibujar una flor y de aprender algo nuevo: cómo se resuelven los pétalos, cómo lograr sombreados suaves y transiciones de luz que se sientan naturales, no forzadas.",
         "technique": "Grafito sobre papel",
         "size": "A4",
         "featured": false
@@ -59,9 +59,23 @@
         "status": "vendida",
         "price": null,
         "priceVisible": false,
-        "description": "Realismo automotriz, técnica adaptable a otros vehículos por encargo.",
+        "description": "Esta camioneta es de mi tío, y está en mi familia desde que tengo memoria, siempre la asocié con estar en casa, con los míos. Fue un encargo para mi primo, y también mi primer dibujo realista de un vehículo. Le puse 10 horas y la disfruté por sus texturas, tan distintas entre sí. Lo que más me importaba era que se notaran el óxido, la pintura gastada, los años encima, eso es lo que la hace única, y quería que quedara grabado en el papel tal cual es.",
         "technique": "Grafito sobre papel",
         "size": "30x40cm",
         "featured": false
+    },
+    {
+        "id": "retrato-experimento-valores",
+        "title": "Título por definir",
+        "image": "/dibujo-mujer.jpeg",
+        "type": "original",
+        "status": "disponible",
+        "price": null,
+        "priceVisible": false,
+        "description": "No sé quién es esta mujer — fue puramente una referencia para lo que quería practicar. Mi objetivo acá no era el detalle, sino resolver bien los valores: entender dónde cae la luz y dónde se hunde la sombra antes de preocuparme por lo pequeño. Otra vez grafito y carbonilla juntos, buscando esa base sólida de luces y sombras que sostiene todo lo demás.",
+        "technique": "Grafito y carbonilla sobre papel",
+        "size": "",
+        "featured": false,
+        "gallery": []
     }
 ]

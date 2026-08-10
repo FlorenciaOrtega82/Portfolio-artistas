@@ -1,24 +1,42 @@
 ---
-import artworks from '../data/artworks.json';
+interface Artwork {
+  id: string;
+  title: string;
+  image: string;
+  type: string;
+  status: string;
+  price: number | null;
+  priceVisible: boolean;
+  description: string;
+  technique: string;
+  size: string;
+  featured: boolean;
+  gallery?: string[];
+}
+
+import artworksRaw from "../data/artworks.json";
+const artworks = artworksRaw as Artwork[];
+
+import processItems from "../data/process.json";
 
 const statusConfig: Record<string, { label: string; classes: string }> = {
   disponible: {
-    label: 'Disponible',
-    classes: 'bg-[var(--color-moss-bg)] text-[var(--color-moss)]',
+    label: "Disponible",
+    classes: "bg-[var(--color-moss-bg)] text-[var(--color-moss)]",
   },
   vendida: {
-    label: 'Vendida',
-    classes: 'bg-[var(--color-ink-bg)] text-[var(--color-ink-soft)]',
+    label: "Vendida",
+    classes: "bg-[var(--color-ink-bg)] text-[var(--color-ink-soft)]",
   },
-  'a-pedido': {
-    label: 'A pedido',
-    classes: 'bg-[var(--color-ochre-bg)] text-[var(--color-ochre)]',
+  "a-pedido": {
+    label: "A pedido",
+    classes: "bg-[var(--color-ochre-bg)] text-[var(--color-ochre)]",
   },
 };
 const typeLabels: Record<string, string> = {
-  original: 'Obra original',
-  impresion: 'Impresión',
-  encargo: 'Encargo',
+  original: "Obra original",
+  impresion: "Impresión",
+  encargo: "Encargo",
 };
 ---
 
@@ -28,42 +46,46 @@ const typeLabels: Record<string, string> = {
   </h2>
 
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-    {artworks.map((art) => (
-      
-      <button type="button" class="group relative text-left cursor-pointer" data-artwork-id={art.id}>
-        <div class="relative overflow-hidden rounded-xl bg-neutral-100 aspect-square">
-          <img
-            src={art.image}
-            alt={art.title}
-            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          <span
-            class={`absolute bottom-2 left-2 text-xs font-medium px-2 py-1 rounded-full ${statusConfig[art.status].classes}`}
-          >
-            {statusConfig[art.status].label}
-          </span>
-        </div>
-
-        <div class="mt-2 px-1">
-          <p class="text-sm font-medium text-neutral-900 truncate">
-            {art.title}
-          </p>
-          <div class="flex items-center justify-between mt-1">
-            <span class="text-xs text-neutral-400">
-              {typeLabels[art.type]}
+    {
+      artworks.map((art) => (
+        <button
+          type="button"
+          class="group relative text-left cursor-pointer"
+          data-artwork-id={art.id}
+        >
+          <div class="relative overflow-hidden rounded-xl bg-neutral-100 aspect-square">
+            <img
+              src={art.image}
+              alt={art.title}
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <span
+              class={`absolute bottom-2 left-2 text-xs font-medium px-2 py-1 rounded-full ${statusConfig[art.status].classes}`}
+            >
+              {statusConfig[art.status].label}
             </span>
-            {art.priceVisible && art.price && (
-              <span class="text-xs font-medium text-neutral-700">
-                ${art.price.toLocaleString('es-AR')}
-              </span>
-            )}
           </div>
-        </div>
-      </button>
-    ))}
+
+          <div class="mt-2 px-1">
+            <p class="text-sm font-medium text-neutral-900 truncate">
+              {art.title}
+            </p>
+            <div class="flex items-center justify-between mt-1">
+              <span class="text-xs text-neutral-400">
+                {typeLabels[art.type]}
+              </span>
+              {art.priceVisible && art.price && (
+                <span class="text-xs font-medium text-neutral-700">
+                  ${art.price.toLocaleString("es-AR")}
+                </span>
+              )}
+            </div>
+          </div>
+        </button>
+      ))
+    }
   </div>
 
-  <!-- Modal: uno solo, reutilizado para la obra que se clickee -->
   <dialog
     id="artwork-modal"
     class="backdrop:bg-black/70 rounded-xl p-0 max-w-2xl w-[90vw] m-auto"
@@ -75,82 +97,230 @@ const typeLabels: Record<string, string> = {
         aria-label="Cerrar"
         class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M18 6 6 18" /><path d="M6 6l12 12" />
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <path d="M18 6 6 18"></path><path d="M6 6l12 12"></path>
         </svg>
       </button>
 
-      <img id="modal-main-image" src="" alt="" class="w-full max-h-[60vh] object-contain bg-neutral-100" />
+      <!--
+        Wrapper con overflow-hidden: es el "marco" que recorta la imagen cuando
+        está zoomeada, para que no se salga de los límites del modal.
+      -->
+      <div
+        id="modal-image-wrapper"
+        class="relative w-full max-h-[60vh] overflow-hidden bg-neutral-100"
+      >
+        <img
+          id="modal-main-image"
+          src=""
+          alt=""
+          class="w-full max-h-[60vh] object-contain cursor-zoom-in select-none transition-transform duration-200"
+        />
+      </div>
+      <video
+        id="modal-main-video"
+        class="w-full max-h-[60vh] bg-neutral-100 hidden"
+        controls
+        preload="auto"
+        playsinline></video>
 
       <div class="p-5">
         <h3 id="modal-title" class="font-serif text-lg text-neutral-900"></h3>
         <p id="modal-description" class="text-sm text-neutral-500 mt-1"></p>
-
-        <!-- Contador de fotos: "2 de 4" -->
         <p id="modal-counter" class="text-xs text-neutral-400 mt-3 mb-1"></p>
-
         <div id="modal-thumbnails" class="flex gap-2 overflow-x-auto"></div>
       </div>
     </div>
   </dialog>
 </section>
 
-<script type="application/json" id="artworks-data" set:html={JSON.stringify(artworks)} />
+<script
+  type="application/json"
+  id="artworks-data"
+  set:html={JSON.stringify(artworks)}
+/>
+<script
+  type="application/json"
+  id="process-data"
+  set:html={JSON.stringify(processItems)}
+/>
 
 <script>
-  const dataEl = document.getElementById('artworks-data');
-  const artworksData = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+  const artworksData = JSON.parse(
+    document.getElementById("artworks-data")?.textContent || "[]",
+  );
+  const processData = JSON.parse(
+    document.getElementById("process-data")?.textContent || "[]",
+  );
 
-  const modal = document.getElementById('artwork-modal') as HTMLDialogElement | null;
-  const modalImage = document.getElementById('modal-main-image') as HTMLImageElement | null;
-  const modalTitle = document.getElementById('modal-title');
-  const modalDescription = document.getElementById('modal-description');
-  const modalCounter = document.getElementById('modal-counter');
-  const modalThumbnails = document.getElementById('modal-thumbnails');
-  const closeButton = document.getElementById('modal-close');
+  const modal = document.getElementById(
+    "artwork-modal",
+  ) as HTMLDialogElement | null;
+  const modalImageWrapper = document.getElementById("modal-image-wrapper");
+  const modalImage = document.getElementById(
+    "modal-main-image",
+  ) as HTMLImageElement | null;
+  const modalVideo = document.getElementById(
+    "modal-main-video",
+  ) as HTMLVideoElement | null;
+  const modalTitle = document.getElementById("modal-title");
+  const modalDescription = document.getElementById("modal-description");
+  const modalCounter = document.getElementById("modal-counter");
+  const modalThumbnails = document.getElementById("modal-thumbnails");
+  const closeButton = document.getElementById("modal-close");
 
-  function openModal(artworkId: string) {
+  type MediaItem = { src: string; isVideo: boolean };
+
+  // --- Lógica de zoom, aislada en sus propias funciones ---
+  let isZoomed = false;
+
+  function resetZoom() {
+    if (!modalImage) return;
+    isZoomed = false;
+    modalImage.style.transform = "scale(1)";
+    modalImage.style.transformOrigin = "center center";
+    modalImage.classList.remove("cursor-zoom-out");
+    modalImage.classList.add("cursor-zoom-in");
+  }
+
+  function setZoomOrigin(clientX: number, clientY: number) {
+    if (!modalImage) return;
+    const rect = modalImage.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width) * 100;
+    const y = ((clientY - rect.top) / rect.height) * 100;
+    modalImage.style.transformOrigin = `${x}% ${y}%`;
+  }
+
+  function toggleZoom(clientX: number, clientY: number) {
+    if (!modalImage) return;
+    if (!isZoomed) {
+      setZoomOrigin(clientX, clientY);
+      modalImage.style.transform = "scale(2.2)";
+      isZoomed = true;
+      modalImage.classList.remove("cursor-zoom-in");
+      modalImage.classList.add("cursor-zoom-out");
+    } else {
+      resetZoom();
+    }
+  }
+
+  if (modalImage) {
+    modalImage.addEventListener("click", (e) =>
+      toggleZoom(e.clientX, e.clientY),
+    );
+
+    modalImage.addEventListener("mousemove", (e) => {
+      if (isZoomed) setZoomOrigin(e.clientX, e.clientY);
+    });
+
+    modalImage.addEventListener("touchend", (e) => {
+      const touch = e.changedTouches[0];
+      if (touch) toggleZoom(touch.clientX, touch.clientY);
+    });
+
+    modalImage.addEventListener("touchmove", (e) => {
+      if (isZoomed) {
+        const touch = e.touches[0];
+        if (touch) setZoomOrigin(touch.clientX, touch.clientY);
+      }
+    });
+  }
+  // --- Fin lógica de zoom ---
+
+  const showMedia = (allMedia: MediaItem[], index: number) => {
+    if (!modalImage || !modalVideo || !modalCounter) return;
+    const item = allMedia[index];
+
+    resetZoom();
+
+    if (item.isVideo) {
+      modalImage.classList.add("hidden");
+      modalVideo.classList.remove("hidden");
+      modalVideo.src = item.src;
+      modalVideo.load();
+    } else {
+      modalVideo.pause();
+      modalVideo.classList.add("hidden");
+      modalImage.classList.remove("hidden");
+      modalImage.src = item.src;
+    }
+
+    modalCounter.textContent =
+      allMedia.length > 1 ? `${index + 1} de ${allMedia.length}` : "";
+  };
+
+  function openModal(artworkId: string, targetSrc?: string) {
     const art = artworksData.find((a: any) => a.id === artworkId);
-    if (!art || !modal || !modalImage || !modalTitle || !modalDescription || !modalThumbnails || !modalCounter) return;
+    if (!art || !modal || !modalTitle || !modalDescription || !modalThumbnails)
+      return;
 
-    const allImages = [art.image, ...(art.gallery || [])];
-    let currentIndex = 0;
+    const mainMedia: MediaItem = { src: art.image, isVideo: false };
+    const ownGallery: MediaItem[] = (art.gallery || []).map((src: string) => ({
+      src,
+      isVideo: false,
+    }));
+    const relatedProcess: MediaItem[] = processData
+      .filter((p: any) => p.artworkId === art.id)
+      .map((p: any) => ({ src: p.media, isVideo: !!p.isVideo }));
 
-    // Función interna para actualizar la imagen principal + el contador,
-    // reutilizada tanto al abrir el modal como al clickear una miniatura.
-    const showImage = (index: number) => {
-      currentIndex = index;
-      modalImage.src = allImages[index];
-      modalCounter.textContent = allImages.length > 1 ? `${index + 1} de ${allImages.length}` : '';
-    };
+    const allMedia: MediaItem[] = [mainMedia, ...ownGallery, ...relatedProcess];
 
     modalTitle.textContent = art.title;
-    modalDescription.textContent = art.description || '';
-    modalThumbnails.innerHTML = '';
+    modalDescription.textContent = art.description || "";
+    modalThumbnails.innerHTML = "";
 
-    allImages.forEach((src: string, i: number) => {
-      const thumb = document.createElement('button');
-      thumb.type = 'button';
-      thumb.className = 'flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border border-neutral-200';
-      thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover" alt="" />`;
-      thumb.addEventListener('click', () => showImage(i));
+    allMedia.forEach((item, i) => {
+      const thumb = document.createElement("button");
+      thumb.type = "button";
+      thumb.className =
+        "relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border border-neutral-200";
+      thumb.innerHTML = item.isVideo
+        ? `<div class="w-full h-full bg-neutral-800 flex items-center justify-center">
+             <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+           </div>`
+        : `<img src="${item.src}" class="w-full h-full object-cover" alt="" />`;
+      thumb.addEventListener("click", () => showMedia(allMedia, i));
       modalThumbnails.appendChild(thumb);
     });
 
-    showImage(0);
+    const startIndex = targetSrc
+      ? Math.max(
+          0,
+          allMedia.findIndex((m) => m.src === targetSrc),
+        )
+      : 0;
+    showMedia(allMedia, startIndex);
     modal.showModal();
   }
 
-  document.querySelectorAll('[data-artwork-id]').forEach((el) => {
-    el.addEventListener('click', () => {
-      const id = el.getAttribute('data-artwork-id');
+  document.querySelectorAll("[data-artwork-id]").forEach((el) => {
+    el.addEventListener("click", () => {
+      const id = el.getAttribute("data-artwork-id");
       if (id) openModal(id);
     });
   });
 
-  closeButton?.addEventListener('click', () => modal?.close());
-
-  modal?.addEventListener('click', (e) => {
-    if (e.target === modal) modal.close();
+  closeButton?.addEventListener("click", () => {
+    modal?.close();
+    modalVideo?.pause();
+    resetZoom();
   });
+
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.close();
+      modalVideo?.pause();
+      resetZoom();
+    }
+  });
+
+  (window as any).openArtworkModal = openModal;
 </script>

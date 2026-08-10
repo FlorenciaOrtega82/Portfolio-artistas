@@ -1,0 +1,75 @@
+[
+  {
+    "id": "flor-loto",
+    "title": "Boceto inicial de la flor de loto",
+    "media": "/process/proceso-flor.jpeg",
+    "isVideo": false,
+    "description": "Primeras líneas experimentando antes de meterme con las texturas.",
+    "artworkId": "flor-loto"
+  },
+  {
+    "id": "camioneta-boceto",
+    "title": "Boceto inicial de la camioneta",
+    "media": "/process/proceso-camioneta.jpeg",
+    "isVideo": false,
+    "description": "Comenzando con la parte de la parrilla y el capot, buscando la proporción correcta.",
+    "artworkId": "camioneta"
+  },
+  {
+    "id": "camioneta-oxido",
+    "title": "Trabajando el óxido",
+    "media": "/process/proceso-camioneta2.jpeg",
+    "isVideo": false,
+    "description": "Capa por capa, buscando que se note el paso de los años en la chapa.",
+    "artworkId": "camioneta"
+  },
+  {
+    "id": "camioneta-oxido",
+    "title": "Trabajando en la parte frontal y superior",
+    "media": "/process/proceso-camioneta3.jpeg",
+    "isVideo": false,
+    "description": "Trabajando en la zona superior de la camioneta",
+    "artworkId": "camioneta"
+  },
+  {
+    "id": "camioneta",
+    "title": "Boceto de camioneta completa",
+    "media": "/process/proceso-camioneta4.jpeg",
+    "isVideo": false,
+    "description": "Dibujo a un 90% de la pieza final, buscando que la proporción y detalles estén correctos.",
+    "artworkId": "camioneta"
+  },
+  {
+    "id": "camioneta",
+    "title": "Zoom a zona media del dibujo",
+    "media": "/process/proceso-camioneta5.jpeg",
+    "isVideo": false,
+    "description": "Zoom para poder apreciar los detalles de la chapa y reflejos.",
+    "artworkId": "camioneta"
+  },
+
+  {
+    "id": "boceto-arcangel",
+    "title": "Boceto inicial del arcángel",
+    "media": "/process/proceso-angel.jpeg",
+    "isVideo": false,
+    "description": "Primera mitad del arcangel, experimentando con las alas y musculos superiores.",
+    "artworkId": "arcangel-miguel"
+  },
+  {
+    "id": "Setup-arcangel",
+    "title": "Setup de dibujo",
+    "media": "/process/proceso-angel2.jpeg",
+    "isVideo": false,
+    "description": "Mi setup de trabajo para poder dibujar comoda y tranquila",
+    "artworkId": "arcangel-miguel"
+  },
+  {
+    "id": "como-dibujar-alas",
+    "title": "Timelapse: Cómo dibujo las alas ",
+    "media": "/process/proceso-angel-video.mp4",
+    "isVideo": true,
+    "description": "Timelapse de como dibujo las alas.",
+    "artworkId": "arcangel-miguel"
+  }
+]

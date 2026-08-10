@@ -1,85 +1,117 @@
 ---
-interface ProcessItem {
-    id: string;
-    title: string;
-    media: string;
-    isVideo?: boolean;
-    description?: string;
-}
-
-const processItems: ProcessItem[] = [
-    {
-        id: "boceto-arcangel",
-        title: "Boceto inicial del arcángel",
-        media: "/images/proceso-arcangel-boceto.jpg",
-        description:
-            "Primeras líneas antes de entrar en detalle de luces y sombras.",
-    },
-    {
-        id: "alas-detalle",
-        title: "Detalle de plumas",
-        media: "/images/proceso-alas.jpg",
-        description:
-            "Trabajo capa por capa para lograr textura realista en las alas.",
-    },
-    {
-        id: "como-dibujar-angel",
-        title: "Cómo dibujar un ángel",
-        media: "/videos/como-dibujar-angel.mp4",
-        isVideo: true,
-        description: "Proceso completo, de boceto a pieza terminada.",
-    },
-];
+import processItems from '../data/process.json';
 ---
 
 <section id="proceso" class="px-6 py-16 bg-neutral-50">
     <div class="max-w-6xl mx-auto">
-        <h2
-            class="text-xl md:text-2xl font-serif text-neutral-900 mb-2 text-center"
-        >
+        <h2 class="text-xl md:text-2xl font-serif text-neutral-900 mb-2 text-center">
             Proceso
         </h2>
         <p class="text-sm text-neutral-500 text-center mb-10 max-w-md mx-auto">
             Del boceto a la obra terminada
         </p>
 
-        <div
-            class="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-3 md:overflow-visible"
-        >
-            {
-                processItems.map((item) => (
-                    <div class="shrink-0 w-64 md:w-auto snap-start rounded-lg overflow-hidden bg-white shadow-sm">
-                        <div class="aspect-video bg-neutral-200">
-                            {item.isVideo ? (
-                                <video
-                                    src={item.media}
-                                    class="w-full h-full object-cover"
-                                    controls
-                                    muted
-                                    loop
-                                />
-                            ) : (
-                                <img
-                                    src={item.media}
-                                    alt={item.title}
-                                    class="w-full h-full object-cover"
-                                />
-                            )}
-                        </div>
-
-                        <div class="p-4">
-                            <p class="text-sm font-medium text-neutral-900">
-                                {item.title}
-                            </p>
-                            {item.description && (
-                                <p class="text-xs text-neutral-500 mt-1">
-                                    {item.description}
-                                </p>
-                            )}
-                        </div>
+        <div class="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-3 md:overflow-visible">
+            {processItems.map((item) => (
+                <button
+                    type="button"
+                    class="shrink-0 w-64 md:w-auto snap-start rounded-lg overflow-hidden bg-white shadow-sm text-left cursor-pointer"
+                    data-media={item.media}
+                    data-artwork-id={item.artworkId || ''}
+                    data-is-video={item.isVideo ? '1' : '0'}
+                >
+                    <div class="aspect-video bg-neutral-200 relative">
+                        {item.isVideo ? (
+                            <>
+                                <video src={item.media} class="w-full h-full object-cover" muted loop preload="metadata" />
+                                <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </>
+                        ) : (
+                            <img src={item.media} alt={item.title} class="w-full h-full object-cover" />
+                        )}
                     </div>
-                ))
-            }
+
+                    <div class="p-4">
+                        <p class="text-sm font-medium text-neutral-900">{item.title}</p>
+                        {item.description && (
+                            <p class="text-xs text-neutral-500 mt-1">{item.description}</p>
+                        )}
+                    </div>
+                </button>
+            ))}
         </div>
     </div>
+
+    <!-- Visor propio, solo para items de proceso que NO pertenecen a ninguna obra
+         (artworkId vacío) — por ejemplo, contenido suelto o "varios". -->
+    <dialog id="process-modal" class="backdrop:bg-black/70 rounded-xl p-0 max-w-2xl w-[90vw] m-auto">
+        <div class="relative">
+            <button id="process-modal-close" type="button" aria-label="Cerrar"
+                class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M18 6 6 18" /><path d="M6 6l12 12" />
+                </svg>
+            </button>
+            <img id="process-modal-image" src="" alt="" class="w-full max-h-[70vh] object-contain bg-neutral-100 hidden" />
+            <video id="process-modal-video" class="w-full max-h-[70vh] bg-neutral-100 hidden" controls preload="auto" playsinline></video>
+        </div>
+    </dialog>
 </section>
+
+<script>
+  const processModal = document.getElementById('process-modal') as HTMLDialogElement | null;
+  const processModalImage = document.getElementById('process-modal-image') as HTMLImageElement | null;
+  const processModalVideo = document.getElementById('process-modal-video') as HTMLVideoElement | null;
+  const processModalClose = document.getElementById('process-modal-close');
+
+  document.querySelectorAll('[data-media]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const media = el.getAttribute('data-media') || '';
+      const artworkId = el.getAttribute('data-artwork-id') || '';
+      const isVideo = el.getAttribute('data-is-video') === '1';
+
+      // Caso 1: este item de proceso pertenece a una obra -> abrimos el modal
+      // de la Galería (openArtworkModal, expuesto por Gallery.astro), pasándole
+      // el src exacto para que arranque justo en esa foto.
+      const openArtworkModal = (window as any).openArtworkModal;
+      if (artworkId && typeof openArtworkModal === 'function') {
+        document.getElementById('obra')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Pequeño delay para que el scroll termine antes de abrir el modal
+        // (si se abre en medio del scroll, se siente brusco).
+        setTimeout(() => openArtworkModal(artworkId, media), 400);
+        return;
+      }
+
+      // Caso 2: item sin obra asociada -> usamos el visor propio, simple.
+      if (!processModal || !processModalImage || !processModalVideo) return;
+
+      if (isVideo) {
+        processModalImage.classList.add('hidden');
+        processModalVideo.classList.remove('hidden');
+        processModalVideo.src = media;
+        processModalVideo.load();
+      } else {
+        processModalVideo.pause();
+        processModalVideo.classList.add('hidden');
+        processModalImage.classList.remove('hidden');
+        processModalImage.src = media;
+      }
+
+      processModal.showModal();
+    });
+  });
+
+  processModalClose?.addEventListener('click', () => {
+    processModal?.close();
+    processModalVideo?.pause();
+  });
+
+  processModal?.addEventListener('click', (e) => {
+    if (e.target === processModal) {
+      processModal.close();
+      processModalVideo?.pause();
+    }
+  });
+</script>
